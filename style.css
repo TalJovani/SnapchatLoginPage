@@ -1,0 +1,14 @@
+body {
+  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+}
+
+.login-box {
+  max-width: 400px;
+  width: 100%;
+  border-radius: 12px;
+}
+
+button {
+  font-weight: bold;
+}
