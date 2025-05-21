@@ -12,3 +12,21 @@ body {
 button {
   font-weight: bold;
 }
+.logo {
+  width: 100px;     
+  height: auto;    
+  display: block;
+  margin: 0 auto;
+}
+.signup-text {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1rem;
+}
+
+.signup-text a {
+  font-weight: bold;
+  color: #000;
+  text-decoration: none;
+}
+
