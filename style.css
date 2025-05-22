@@ -1,7 +1,80 @@
+body {
+  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+}
+
+.login-box {
+  width: 330px;
+  border-radius: 5px;
+  height: 340px;
+
+}
+
+.logo {
+  width: 125px;     
+  height: auto;    
+  display: block;
+  margin: 0 auto 15px auto;
+}
+h2 {
+  font-size: 24px;         
+  color: #372c2c;         
+  text-align: center;      
+  font-weight:normal;       
+  font-family: Arial, sans-serif; 
+  margin-bottom: 20px;     
+}
+
+.form-label 
+{
+color: dimgray;
+font-weight: bold;  
+font-size: 10px;
+}
+
+.login-input {
+  background-color: #f5f5f5;             
+  border: none;                          
+  border-bottom: 2px solid transparent;  
+  border-radius: 4px;                    
+  box-shadow: none;
+transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-input:hover 
+{
+  border: 1px solid #00bfff; 
+}
+
+.phone-link {
+  color: #64AFFF !important;  
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.login-btn 
+{
+  background-color:rgb(55, 168, 255);
+  color: white;               
+  font-weight: bold;  
+  border-radius: 999px;
+  font-size: 13px;
+  padding: 6px 20px;
+  width: fit-content;
+  margin: 0 auto;
+  display: block;
+}
+
+.login-btn:hover
+{
+  background-color: rgba(56, 116, 229, 0.768);
+}
 .signup-text {
   text-align: center;
   margin-top: 20px;
-  font-size: 1rem;
+  font-size: 14px;
 }
 
 .signup-text a {
@@ -9,4 +82,8 @@
   color: #000;
   text-decoration: none;
 }
-
+.login-box form {
+  margin-top: 0;       
+  padding-top: 0;      
+  margin-top: -20px;   
+}
