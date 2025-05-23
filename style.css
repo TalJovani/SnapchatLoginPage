@@ -168,4 +168,27 @@ font-size: 12px;
   border: 2px solid black;
   outline: none;
 }
+.footer-bottom {
+  background-color: #1a1a1a;
+  padding: 15px 0;
+}
+
+.footer-bottom-links {
+  display: flex;
+  margin-left: 222px;
+  gap: 40px;
+}
+
+.footer-bottom a {
+  color: #9fa3af72;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-bottom a:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
 
