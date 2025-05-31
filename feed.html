@@ -1,38 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Snapchat Feed</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="feed.css">
 </head>
+
 <body>
 
   <header class="top-navbar d-flex align-items-center justify-content-between px-4">
+    <!-- לוגו וחיפוש -->
     <div class="d-flex align-items-center gap-3">
-      <img src="images/snapchat-logo.svg" alt="Snapchat Logo" class="snap-logo">
-      <input type="text" class="search-input" placeholder="Search">
-    </div>
+  <img src="images/snapchat-logo.svg" alt="Snapchat Logo" class="snap-logo">
+  <div class="search-container">
+    <i class="bi bi-search search-icon"></i>
+    <input type="text" class="search-input" placeholder="Search">
+  </div>
+</div>
 
-    <nav class="nav-icons d-flex gap-4">
-      <a href="#">Stories</a>
-      <a href="#">Spotlight</a>
-      <a href="#">Chat</a>
-      <a href="#">Lenses</a>
-      <a href="#">Snapchat+</a>
+
+
+
+
+
+    <!-- ניווט -->
+    <nav class="nav-icons d-flex align-items-end gap-4">
+      <a href="#" class="nav-link">
+        <div class="nav-box">
+          <i class="bi bi-book nav-icon"></i>
+          <span class="nav-label">Stories</span>
+        </div>
+      </a>
+      <a href="#" class="nav-link">
+        <div class="nav-box">
+          <i class="bi bi-lightning-charge nav-icon"></i>
+          <span class="nav-label">Spotlight</span>
+        </div>
+      </a>
+      <a href="#" class="nav-link">
+        <div class="nav-box">
+          <i class="bi bi-chat-dots nav-icon"></i>
+          <span class="nav-label">Chat</span>
+        </div>
+      </a>
+      <a href="#" class="nav-link">
+        <div class="nav-box">
+          <i class="bi bi-camera nav-icon"></i>
+          <span class="nav-label">Lenses</span>
+        </div>
+      </a>
+      <a href="#" class="nav-link">
+        <div class="nav-box">
+          <i class="bi bi-star nav-icon"></i>
+          <span class="nav-label">Snapchat+</span>
+        </div>
+      </a>
     </nav>
 
+    <!-- סמל תפריט וכפתור -->
     <div class="d-flex align-items-center gap-3">
-      <i class="bi bi-grid"></i>
+      <div class="menu-container">
+        <i class="bi bi-grid"></i>
+        <span class="tooltip-text">Menu</span>
+      </div>
       <button class="btn btn-light btn-sm">Download</button>
     </div>
   </header>
 
 </body>
-</html>
 
+</html>
