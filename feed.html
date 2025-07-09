@@ -6,34 +6,149 @@
   <title>Snapchat Feed</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Bootstrap CSS -->
+  <!-- Bootstrap CSS & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="feed.css">
+
+  <style>
+    :root {
+      --bg-color: #121212;
+      --text-color: #ffffff;
+      --card-bg: #000000;
+      --container-bg: #181818;
+    }
+
+    body.light-mode {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --card-bg: #f8f9fa;
+      --container-bg: #f1f1f1;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .top-navbar {
+      background-color: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    .search-container {
+      display: flex;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 0.25rem 0.5rem;
+    }
+
+    body.light-mode .search-container {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .search-input {
+      background: none;
+      border: none;
+      color: var(--text-color);
+      outline: none;
+      margin-left: 0.5rem;
+    }
+
+    .search-icon {
+      color: #ccc;
+    }
+
+    .snap-logo {
+      width: 32px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-color);
+    }
+
+    .nav-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.75rem;
+    }
+
+    .nav-icon {
+      font-size: 1.25rem;
+    }
+
+    .menu-container {
+      color: var(--text-color);
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    .tooltip-text {
+      display: none;
+    }
+
+    .like-icon {
+      color: #ff4d4d;
+      font-size: 1.2rem;
+    }
+
+    .feed-container {
+      background-color: var(--container-bg);
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .story-card {
+      color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 9 / 16;
+      display: flex;
+      align-items: flex-end;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .story-info {
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    #scrollTopBtn {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: opacity 0.3s ease;
+    }
+  </style>
 </head>
 
-<body>
+<body class="bg-dark text-white">
 
-  <header class="top-navbar d-flex align-items-center justify-content-between px-4">
-    <!-- לוגו וחיפוש -->
+  <!-- Navbar -->
+  <header class="top-navbar d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center gap-3">
-  <img src="images/snapchat-logo.svg" alt="Snapchat Logo" class="snap-logo">
-  <div class="search-container">
-    <i class="bi bi-search search-icon"></i>
-    <input type="text" class="search-input" placeholder="Search">
-  </div>
-</div>
+      <div class="snap-logo-container">
+        <img src="images/snapchat-logo.svg" alt="Snapchat Logo" class="snap-logo">
+        <span class="tooltip-text">Snapchat</span>
+      </div>
+      <div class="search-container">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text" class="search-input" placeholder="Search">
+      </div>
+    </div>
 
-
-
-
-
-
-    <!-- ניווט -->
     <nav class="nav-icons d-flex align-items-end gap-4">
       <a href="#" class="nav-link">
         <div class="nav-box">
@@ -67,16 +182,129 @@
       </a>
     </nav>
 
-    <!-- סמל תפריט וכפתור -->
-    <div class="d-flex align-items-center gap-3">
+    <div class="d-flex align-items-center gap-2">
+      <button id="themeToggle" class="btn btn-outline-light btn-sm">
+        <i class="bi bi-moon-fill"></i>
+      </button>
       <div class="menu-container">
         <i class="bi bi-grid"></i>
-        <span class="tooltip-text">Menu</span>
       </div>
       <button class="btn btn-light btn-sm">Download</button>
     </div>
   </header>
 
+  <!-- Feed -->
+  <main class="feed-container" id="feed"></main>
+  <button id="scrollTopBtn" class="btn btn-warning position-fixed"
+    style="bottom: 20px; right: 20px; display: none; z-index: 999;">
+    ↑
+  </button>
+
+  <script>
+    const dummyStories = [
+      { id: 1, user: "snapqueen", time: "1h ago", location: "Paris", image: "https://picsum.photos/id/101/400/600", text: "Morning coffee vibes ☕", likes: 4, liked: false },
+      { id: 2, user: "coolcat", time: "2h ago", location: "Berlin", image: "https://picsum.photos/id/102/400/600", text: "Sunny day downtown 🌞", likes: 12, liked: false },
+      { id: 3, user: "funnyguy", time: "3h ago", location: "Tokyo", image: "https://picsum.photos/id/103/400/600", text: "Trying out new sushi 🍣", likes: 9, liked: false },
+      { id: 4, user: "sunnygirl", time: "4h ago", location: "Barcelona", image: "https://picsum.photos/id/104/400/600", text: "Beach day fun 🏖️", likes: 15, liked: false },
+      { id: 5, user: "urbanlegend", time: "5h ago", location: "New York", image: "https://picsum.photos/id/105/400/600", text: "City lights at night 🌃", likes: 2, liked: false },
+      { id: 6, user: "zippy", time: "6h ago", location: "Rome", image: "https://picsum.photos/id/106/400/600", text: "Pizza time! 🍕", likes: 6, liked: false },
+      { id: 7, user: "whispermint", time: "7h ago", location: "Amsterdam", image: "https://picsum.photos/id/107/400/600", text: "Canals are beautiful today 🚣", likes: 10, liked: false },
+      { id: 8, user: "neonvibes", time: "8h ago", location: "Miami", image: "https://picsum.photos/id/108/400/600", text: "Party night begins 🎉", likes: 1, liked: false },
+      { id: 9, user: "snaplord", time: "9h ago", location: "Toronto", image: "https://picsum.photos/id/109/400/600", text: "Skating at the rink ⛸️", likes: 7, liked: false },
+      { id: 10, user: "galaxykid", time: "10h ago", location: "Dubai", image: "https://picsum.photos/id/110/400/600", text: "Desert sunrise 🌅", likes: 20, liked: false }
+    ];
+
+    const feed = document.getElementById('feed');
+
+    function renderFeed(stories) {
+      feed.innerHTML = '';
+      if (stories.length === 0) {
+        feed.innerHTML = '<p class="text-center text-muted w-100">No results found.</p>';
+        return;
+      }
+
+      stories.forEach((story) => {
+        const card = document.createElement('div');
+        card.className = 'story-card';
+        card.style.backgroundImage = `url(${story.image})`;
+
+        card.innerHTML = `
+          <div class="story-info">
+            <strong>${story.user}</strong><br>
+            <small>${story.time} • ${story.location}</small>
+            <div class="text-truncate mt-1" style="font-size: 0.8rem;">${story.text}</div>
+            <div class="d-flex align-items-center mt-1">
+              <i class="bi bi-heart${story.liked ? '-fill' : ''} like-icon me-2" 
+                 style="cursor:pointer; transition: transform 0.2s;" 
+                 data-index="${story.id}"></i>
+              <span class="like-count">${story.likes}</span>
+            </div>
+          </div>
+        `;
+
+        feed.appendChild(card);
+      });
+
+      // Like button logic
+      document.querySelectorAll('.like-icon').forEach(icon => {
+        icon.addEventListener('click', function () {
+          const id = parseInt(this.dataset.index);
+          const story = dummyStories.find(s => s.id === id);
+          const likeCountSpan = this.nextElementSibling;
+
+          story.liked = !story.liked;
+          story.likes += story.liked ? 1 : -1;
+
+          this.classList.toggle('bi-heart');
+          this.classList.toggle('bi-heart-fill');
+          likeCountSpan.textContent = story.likes;
+
+          this.style.transform = 'scale(1.4)';
+          setTimeout(() => {
+            this.style.transform = 'scale(1)';
+          }, 200);
+        });
+      });
+    }
+
+    // Search filtering
+    document.querySelector('.search-input').addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      const filtered = dummyStories.filter(story =>
+        story.text.toLowerCase().includes(query)
+      );
+      renderFeed(filtered);
+    });
+
+    // Theme toggle
+    const toggleButton = document.getElementById('themeToggle');
+    toggleButton.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const icon = toggleButton.querySelector('i');
+      if (document.body.classList.contains('light-mode')) {
+        icon.classList.replace('bi-moon-fill', 'bi-sun-fill');
+        toggleButton.classList.replace('btn-outline-light', 'btn-outline-dark');
+      } else {
+        icon.classList.replace('bi-sun-fill', 'bi-moon-fill');
+        toggleButton.classList.replace('btn-outline-dark', 'btn-outline-light');
+      }
+    });
+
+    // Initial render
+    renderFeed(dummyStories);
+
+
+    //Slide up button
+    const scrollBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+      scrollBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+    });
+
+    scrollBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
 </body>
 
 </html>
