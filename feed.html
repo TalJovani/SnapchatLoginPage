@@ -131,6 +131,22 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
       transition: opacity 0.3s ease;
     }
+
+    .comments-section {
+      padding: 0.5rem;
+      font-size: 0.75rem;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: none;
+    }
+
+    .comment-input {
+      width: 100%;
+      margin-top: 0.25rem;
+    }
+
+    .typing-indicator {
+      font-size: 0.75rem;
+    }
   </style>
 </head>
 
@@ -202,79 +218,114 @@
 
   <script>
     const dummyStories = [
-      { id: 1, user: "snapqueen", time: "1h ago", location: "Paris", image: "https://picsum.photos/id/101/400/600", text: "Morning coffee vibes ☕", likes: 4, liked: false },
-      { id: 2, user: "coolcat", time: "2h ago", location: "Berlin", image: "https://picsum.photos/id/102/400/600", text: "Sunny day downtown 🌞", likes: 12, liked: false },
-      { id: 3, user: "funnyguy", time: "3h ago", location: "Tokyo", image: "https://picsum.photos/id/103/400/600", text: "Trying out new sushi 🍣", likes: 9, liked: false },
-      { id: 4, user: "sunnygirl", time: "4h ago", location: "Barcelona", image: "https://picsum.photos/id/104/400/600", text: "Beach day fun 🏖️", likes: 15, liked: false },
-      { id: 5, user: "urbanlegend", time: "5h ago", location: "New York", image: "https://picsum.photos/id/105/400/600", text: "City lights at night 🌃", likes: 2, liked: false },
-      { id: 6, user: "zippy", time: "6h ago", location: "Rome", image: "https://picsum.photos/id/106/400/600", text: "Pizza time! 🍕", likes: 6, liked: false },
-      { id: 7, user: "whispermint", time: "7h ago", location: "Amsterdam", image: "https://picsum.photos/id/107/400/600", text: "Canals are beautiful today 🚣", likes: 10, liked: false },
-      { id: 8, user: "neonvibes", time: "8h ago", location: "Miami", image: "https://picsum.photos/id/108/400/600", text: "Party night begins 🎉", likes: 1, liked: false },
-      { id: 9, user: "snaplord", time: "9h ago", location: "Toronto", image: "https://picsum.photos/id/109/400/600", text: "Skating at the rink ⛸️", likes: 7, liked: false },
-      { id: 10, user: "galaxykid", time: "10h ago", location: "Dubai", image: "https://picsum.photos/id/110/400/600", text: "Desert sunrise 🌅", likes: 20, liked: false }
+      { id: 1, user: "snapqueen", time: "1h ago", location: "Paris", image: "https://picsum.photos/id/101/400/600", text: "Morning coffee vibes ☕", likes: 4, liked: false, comments: [] },
+      { id: 2, user: "coolcat", time: "2h ago", location: "Berlin", image: "https://picsum.photos/id/102/400/600", text: "Sunny day downtown 🌞", likes: 12, liked: false, comments: [] },
+      { id: 3, user: "funnyguy", time: "3h ago", location: "Tokyo", image: "https://picsum.photos/id/103/400/600", text: "Trying out new sushi 🍣", likes: 9, liked: false, comments: [] },
+      { id: 4, user: "sunnygirl", time: "4h ago", location: "Barcelona", image: "https://picsum.photos/id/104/400/600", text: "Beach day fun 🏖️", likes: 15, liked: false, comments: [] },
+      { id: 5, user: "urbanlegend", time: "5h ago", location: "New York", image: "https://picsum.photos/id/105/400/600", text: "City lights at night 🌃", likes: 2, liked: false, comments: [] },
+      { id: 6, user: "zippy", time: "6h ago", location: "Rome", image: "https://picsum.photos/id/106/400/600", text: "Pizza time! 🍕", likes: 6, liked: false, comments: [] },
+      { id: 7, user: "whispermint", time: "7h ago", location: "Amsterdam", image: "https://picsum.photos/id/107/400/600", text: "Canals are beautiful today 🚣", likes: 10, liked: false, comments: [] },
+      { id: 8, user: "neonvibes", time: "8h ago", location: "Miami", image: "https://picsum.photos/id/108/400/600", text: "Party night begins 🎉", likes: 1, liked: false, comments: [] },
+      { id: 9, user: "snaplord", time: "9h ago", location: "Toronto", image: "https://picsum.photos/id/109/400/600", text: "Skating at the rink ⛸️", likes: 7, liked: false, comments: [] },
+      { id: 10, user: "galaxykid", time: "10h ago", location: "Dubai", image: "https://picsum.photos/id/110/400/600", text: "Desert sunrise 🌅", likes: 20, liked: false, comments: [] }
     ];
 
     const feed = document.getElementById('feed');
 
     function renderFeed(stories) {
       feed.innerHTML = '';
-      if (stories.length === 0) {
-        feed.innerHTML = '<p class="text-center text-muted w-100">No results found.</p>';
-        return;
-      }
-
-      stories.forEach((story) => {
+      stories.forEach(story => {
         const card = document.createElement('div');
         card.className = 'story-card';
         card.style.backgroundImage = `url(${story.image})`;
 
         card.innerHTML = `
-          <div class="story-info">
-            <strong>${story.user}</strong><br>
-            <small>${story.time} • ${story.location}</small>
-            <div class="text-truncate mt-1" style="font-size: 0.8rem;">${story.text}</div>
-            <div class="d-flex align-items-center mt-1">
-              <i class="bi bi-heart${story.liked ? '-fill' : ''} like-icon me-2" 
-                 style="cursor:pointer; transition: transform 0.2s;" 
-                 data-index="${story.id}"></i>
-              <span class="like-count">${story.likes}</span>
-            </div>
+        <div class="story-info">
+          <strong>${story.user}</strong><br>
+          <small>${story.time} • ${story.location}</small>
+          <div class="text-truncate mt-1">${story.text}</div>
+          <div class="d-flex align-items-center mt-1">
+            <i class="bi bi-heart${story.liked ? '-fill' : ''} like-icon me-2" data-id="${story.id}"></i>
+            <span class="like-count">${story.likes}</span>
           </div>
-        `;
+          <button class="btn btn-sm btn-outline-light mt-2 toggle-comments" data-id="${story.id}">Show Comments</button>
+          <div class="comments-section" id="comments-${story.id}"></div>
+          <div class="input-group input-group-sm mt-2">
+            <input type="text" class="form-control comment-input" placeholder="Write a comment..." data-id="${story.id}">
+            <button class="btn btn-primary send-comment" data-id="${story.id}">Send</button>
+          </div>
+        </div>
+      `;
 
         feed.appendChild(card);
       });
 
-      // Like button logic
+      // Like functionality
       document.querySelectorAll('.like-icon').forEach(icon => {
         icon.addEventListener('click', function () {
-          const id = parseInt(this.dataset.index);
+          const id = +this.dataset.id;
           const story = dummyStories.find(s => s.id === id);
-          const likeCountSpan = this.nextElementSibling;
-
           story.liked = !story.liked;
           story.likes += story.liked ? 1 : -1;
+          renderFeed(dummyStories);
+        });
+      });
 
-          this.classList.toggle('bi-heart');
-          this.classList.toggle('bi-heart-fill');
-          likeCountSpan.textContent = story.likes;
+      // Comment toggle
+      document.querySelectorAll('.toggle-comments').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const id = this.dataset.id;
+          const section = document.getElementById(`comments-${id}`);
+          section.style.display = section.style.display === 'block' ? 'none' : 'block';
+          this.textContent = section.style.display === 'block' ? 'Hide Comments' : 'Show Comments';
+          renderComments(id);
+        });
+      });
 
-          this.style.transform = 'scale(1.4)';
-          setTimeout(() => {
-            this.style.transform = 'scale(1)';
-          }, 200);
+      // Add comment
+      document.querySelectorAll('.send-comment').forEach(button => {
+        button.addEventListener('click', function () {
+          const id = +this.dataset.id;
+          const input = document.querySelector(`.comment-input[data-id="${id}"]`);
+          const text = input.value.trim();
+          if (text) {
+            const story = dummyStories.find(s => s.id === id);
+            story.comments.push(text);
+            input.value = '';
+            renderComments(id);
+          }
+        });
+      });
+
+      // Typing indicator
+      document.querySelectorAll('.comment-input').forEach(input => {
+        input.addEventListener('input', function () {
+          const id = this.dataset.id;
+          const indicatorId = `typing-${id}`;
+          let indicator = document.getElementById(indicatorId);
+          if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.id = indicatorId;
+            indicator.className = 'typing-indicator mt-1 text-warning';
+            indicator.innerText = 'User is typing...';
+            this.closest('.story-info').appendChild(indicator);
+          }
+
+          clearTimeout(this.typingTimeout);
+          this.typingTimeout = setTimeout(() => {
+            indicator?.remove();
+          }, 2000);
         });
       });
     }
 
-    // Search filtering
-    document.querySelector('.search-input').addEventListener('input', function () {
-      const query = this.value.toLowerCase();
-      const filtered = dummyStories.filter(story =>
-        story.text.toLowerCase().includes(query)
-      );
-      renderFeed(filtered);
-    });
+
+
+    function renderComments(id) {
+      const story = dummyStories.find(s => s.id == id);
+      const section = document.getElementById(`comments-${id}`);
+      section.innerHTML = story.comments.map(c => `<div class="mt-1">• ${c}</div>`).join('');
+    }
 
     // Theme toggle
     const toggleButton = document.getElementById('themeToggle');
@@ -290,20 +341,17 @@
       }
     });
 
-    // Initial render
-    renderFeed(dummyStories);
-
-
-    //Slide up button
+    // Scroll to top
     const scrollBtn = document.getElementById('scrollTopBtn');
-
     window.addEventListener('scroll', () => {
       scrollBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
     });
-
     scrollBtn.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // Init
+    renderFeed(dummyStories);
   </script>
 </body>
 
